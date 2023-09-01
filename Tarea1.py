@@ -13,14 +13,14 @@ positivas = ["excelente","gran",  "positivo"]
 neutras = ["pérdida"]
 negativas = ["muerte", "luto"]
 
-def vector_palabras_clavas(tweet, palabras_clave):
+def vector_palabras_claves(tweet, palabras_clave):
     w = [0,0,0,0,0,0]
     
     for clave in palabras_clave:
         for word in tweet:
             if word.lower()==clave.lower():
                 i = palabras_clave.index(clave)
-                w[i] = 1
+                w[i] += 1
     return w        
 
 def count_palabras_clave(tweet, positivas, neutras, negativas):
@@ -42,13 +42,16 @@ def count_palabras_clave(tweet, positivas, neutras, negativas):
 
 
 def calidad(w):
-    x = np.array(w)
+    calidad = 0
     largo = 1/len(w)
-    return x*largo
+
+    for cant in w:
+        calidad = calidad + cant 
+    return calidad*largo
 
 
 def score_sentimental(s,v_score):
-    #s = calidad(s)
+    
     v_score = np.array(v_score)
     return np.dot(v_score, s)
 
@@ -85,7 +88,7 @@ def calidad_promedio(tweets, palabras_clave):
     calidades = 0
     for tweet in tweets:
         w = string_to_vector_palabras(tweet)
-        w = vector_palabras_clavas(w, palabras_clave)
+        w = vector_palabras_claves(w, palabras_clave)
         w = calidad(w)
         calidades += w
     return calidades/len(tweets)
@@ -95,12 +98,12 @@ def calidad_promedio(tweets, palabras_clave):
 
 
 
-# tweet = string_to_vector_palabras(tweet1)
-# w1 = vector_palabras_clavas(tweet, palabras_clave)
-# s1 = count_palabras_clave(tweet, positivas, neutras,negativas)
+tweet = string_to_vector_palabras(tweet1)
+w1 = vector_palabras_claves(tweet, palabras_clave)
+s1 = count_palabras_clave(tweet, positivas, neutras,negativas)
 # cali1 = calidad(w1)
-# score = [1,0,-1]
-# total_score1 = score_sentimental(s1, score)
+score = [1,0,-1]
+total_score1 = score_sentimental(s1, score)
 
 # tweet = string_to_vector_palabras(tweet2)
 # w2 = vector_palabras_clavas(tweet, palabras_clave)
@@ -120,7 +123,7 @@ def calidad_promedio(tweets, palabras_clave):
 # cali4 = calidad(w4)
 # total_score4 = score_sentimental(s4, score)
 
-# print(total_score1)
+#print(total_score1)
 # print(total_score2)
 # print(total_score3)
 # print(total_score4)
